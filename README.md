@@ -6,7 +6,7 @@ The latest versions of `lint-staged` require Node.js v6 or newer. (Versions of `
 
 ## Why
 
-Linting makes more sense when running before committing your code. By doing that you can ensure no errors are going into repository and enforce code style. But running a lint process on a whole project is slow and linting results can be irrelevant. Ultimately you only want to lint files that will be committed.
+Linting makes more sense when running before committing your code. By doing that you can ensure no errors are going into a repository and enforce code style. But running a lint process on a whole project is slow and linting results can be irrelevant. Ultimately you only want to lint files that will be committed.
 
 This project contains a script that will run arbitrary shell tasks with a list of staged files as an argument, filtered by a specified glob pattern.
 
@@ -35,7 +35,7 @@ This project contains a script that will run arbitrary shell tasks with a list o
 
 Now change a few files, `git add` some of them to your commit and try to `git commit` them.
 
-And this is how it looks like in action:
+This is how it looks in action:
 
 <p align="center">
   <img src="./screenshots/lint-staged-prettier.gif" alt="lint-staged with prettier example"
@@ -48,13 +48,13 @@ See [examples](#examples) and [configuration](#configuration) below.
 
 > **NOTE:**
 >
-> If you're using commitizen and having following npm-script `{ commit: git-cz }`, `precommit` hook will run twice before commitizen cli and after the commit. [This buggy behaviour is introduced by husky](https://github.com/okonet/lint-staged/issues/152#issuecomment-306046520).
+> If you're using commitizen and having following npm-script `{ commit: git-cz }`, the `precommit` hook will run twice (before commitizen cli and after the commit). [This buggy behaviour is introduced by husky](https://github.com/okonet/lint-staged/issues/152#issuecomment-306046520).
 >
-> To mitigate this rename your `commit` npm script to something non git hook namespace like, for example `{ cz: git-cz }`
+> To mitigate this, rename your `commit` npm script to something not in the git hook namespace, for example `{ cz: git-cz }`
 
 ## Changelog
 
-[releases](https://github.com/okonet/lint-staged/releases)
+[Releases](https://github.com/okonet/lint-staged/releases)
 
 ## Command line flags
 
@@ -74,13 +74,13 @@ $ ./node_modules/.bin/lint-staged --help
 
 * **`--config [path]`**: This can be used to manually specify the `lint-staged` config file location. However, if the specified file cannot be found, it will error out instead of performing the usual search.
 * **`--debug`**: Enabling the debug mode does the following:
-  - `lint-staged` uses the [debug](https://github.com/visionmedia/debug) module internally to log information about staged files, commands being executed, location of binaries etc. Debug logs, which are automatically enabled by passing the flag, can also be enabled by setting the environment variable `$DEBUG` to `lint-staged*`.
+  - `lint-staged` uses the [debug](https://github.com/visionmedia/debug) module internally to log information about staged files, commands being executed, location of binaries, etc. Debug logs, which are automatically enabled by passing the flag, can also be enabled by setting the environment variable `$DEBUG` to `lint-staged*`.
   - Use the [`verbose` renderer](https://github.com/SamVerschueren/listr-verbose-renderer) for `listr`.
   - Do not pass `--silent` to npm scripts.
 
 ## Configuration
 
-Starting with v3.1 you can now use different ways of configuring it:
+Starting with v3.1 you can now use different configuration methods:
 
 * `lint-staged` object in your `package.json`
 * `.lintstagedrc` file in JSON or YML format
@@ -93,7 +93,7 @@ Lint-staged supports simple and advanced config formats.
 
 ### Simple config format
 
-Should be an object where each value is a command to run and its key is a glob pattern to use for this command. This package uses [micromatch](https://github.com/micromatch/micromatch) for glob patterns.
+This should be an object where each value is a command to run and its key is a glob pattern to use for this command. This package uses [micromatch](https://github.com/micromatch/micromatch) for glob patterns.
 
 #### `package.json` example:
 ```json
@@ -105,7 +105,6 @@ Should be an object where each value is a command to run and its key is a glob p
 ```
 
 #### `.lintstagedrc` example
-
 ```json
 {
   "*": "your-cmd"
@@ -119,15 +118,14 @@ So, considering you did `git add file1.ext file2.ext`, lint-staged will run the 
 `your-cmd file1.ext file2.ext`
 
 ### Advanced config format
-To set options and keep lint-staged extensible, advanced format can be used. This should hold linters object in `linters` property.
+To set options and keep lint-staged extensible, advanced format can be used. This should hold linters object in a `linters` property.
 
 ## Options
 
 * `concurrent` — *true* — runs linters for each glob pattern simultaneously. If you don’t want this, you can set `concurrent: false`
 * `chunkSize` — Max allowed chunk size based on number of files for glob pattern. This is important on windows based systems to avoid command length limitations. See [#147](https://github.com/okonet/lint-staged/issues/147)
-* `globOptions` — `{ matchBase: true, dot: true }` — [micromatch options](https://github.com/micromatch/micromatch#options) to
-customize how glob patterns match files.
-* `ignore` - `['**/docs/**/*.js']` - array of glob patterns to entirely ignore from any task.
+* `globOptions` — `{ matchBase: true, dot: true }` — [micromatch options](https://github.com/micromatch/micromatch#options) to customize how glob patterns match files.
+* `ignore` - `['**/docs/**/*.js']` - array of glob patterns to entirely ignore in all tasks.
 * `linters` — `Object` — keys (`String`) are glob patterns, values (`Array<String> | String`) are commands to execute.
 * `subTaskConcurrency` — `1` — Controls concurrency for processing chunks generated for each linter. Execution is **not** concurrent by default(see [#225](https://github.com/okonet/lint-staged/issues/225))
 
@@ -165,7 +163,7 @@ Also see [How to use `lint-staged` in a multi package monorepo?](#how-to-use-lin
 
 Supported are any executables installed locally or globally via `npm` as well as any executable from your $PATH.
 
-> Using globally installed scripts is discouraged, since lint-staged may not work for someone who doesn’t have it installed.
+> Using globally installed scripts are discouraged, since lint-staged may not work for someone who doesn’t have it installed.
 
 `lint-staged` is using [npm-which](https://github.com/timoxley/npm-which) to locate locally installed scripts. So in your `.lintstagedrc` you can write:
 
@@ -190,7 +188,7 @@ Example repo: [sudo-suhas/lint-staged-multi-pkg](https://github.com/sudo-suhas/l
 
 ## Reformatting the code
 
-Tools like ESLint/TSLint or stylefmt can reformat your code according to an appropriate config  by running `eslint --fix`/`tslint --fix`. After the code is reformatted, we want it to be added to the same commit. This can be done using following config:
+Tools like ESLint/TSLint or stylefmt can reformat your code according to an appropriate config by running `eslint --fix`/`tslint --fix`. After the code is reformatted, we want it to be added to the same commit. This can be done using following config:
 
 ```json
 {
@@ -238,7 +236,7 @@ This will run `eslint --fix` and automatically add changes to the commit. Please
 
 ### Reuse npm script
 
-If you wish to reuse a npm script defined in your package.json:
+If you wish to reuse an npm script defined in your package.json:
 
 ```json
 {
@@ -306,5 +304,5 @@ The following is equivalent:
 
   [imagemin-lint-staged](https://github.com/tomchentw/imagemin-lint-staged) is a CLI tool designed for lint-staged usage with sensible defaults.
 
-  See more on [this blog post](https://medium.com/@tomchentw/imagemin-lint-staged-in-place-minify-the-images-before-adding-to-the-git-repo-5acda0b4c57e) for benefits of this approach.
+  See more on [this blog post](https://medium.com/@tomchentw/imagemin-lint-staged-in-place-minify-the-images-before-adding-to-the-git-repo-5acda0b4c57e) for the benefits of this approach.
 </details>
